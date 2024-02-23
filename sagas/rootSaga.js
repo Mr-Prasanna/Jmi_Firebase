@@ -5,6 +5,7 @@ import registrationSaga from './registrationSaga';
 import  addTimeSheetSaga from './attendanceSaga';
 import showTimesheetSaga from './showAttendanceSaga';
 import timesheetSaga from './timesheetSaga';
+import showBirthdaySaga from './birthdaySaga';
 
 function* rootSaga() {
     yield all([
@@ -12,6 +13,7 @@ function* rootSaga() {
        // registrationSaga(),
         addTimeSheetSaga(),
         showTimesheetSaga(),
+        showBirthdaySaga()
        // timesheetSaga(),
 
     ]);

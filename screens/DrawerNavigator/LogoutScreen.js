@@ -4,9 +4,7 @@ import { View, Text, TouchableHighlight, BackHandler, StyleSheet, Alert } from '
 import { useNavigation } from '@react-navigation/native';
 function Logout() {
     const navigation = useNavigation();
-    // const handleLogin = () => {
-    //     navigation.navigate('Login');
-    // }
+
     useEffect(() => {
         navigation.navigate('Login');
     })
