@@ -10,8 +10,15 @@ import ShowTimesheet from "../BottomTabNavigator/ShowTimesheet";
 import Logout from "./LogoutScreen";
 import TimeSheet from "../BottomTabNavigator/TimesheetScreen";
 import ImageInDrawer from "../ImageInDrawer";
+import { TouchableRipple,Switch,
+} from 'react-native-paper';
+// import { useTheme } from '@react-navigation/native';
+// import{ AuthContext } from '../Context';
 const Drawer = createDrawerNavigator();
 function MyDrawer() {
+    // const paperTheme = useTheme();
+    // const  toggleTheme  =useTheme()
+    // const  toggleTheme  = React.useContext(AuthContext);
     return (
         <Drawer.Navigator useLegacyImplementation={false}  
        initialRouteName='Home'
@@ -55,6 +62,16 @@ function MyDrawer() {
                 ),
              }}
             />
+             {/* <Drawer.Screen title="Preferences">
+                        <TouchableRipple onPress={() => {toggleTheme()}}>
+                            <View style={styles.preference}>
+                                <Text>Dark Theme</Text>
+                                <View pointerEvents="none">
+                                    <Switch value={paperTheme.dark}/>
+                                </View>
+                            </View>
+                        </TouchableRipple>
+                    </Drawer.Screen> */}
             <Drawer.Screen name="Logout" component={Logout} 
              options={{
                 title: 'LOGOUT',

@@ -1,6 +1,6 @@
 // LoginScreen.js
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Pressable, TouchableHighlight, StyleSheet, Image, Alert, ImageBackground, KeyboardAvoidingView, Dimensions } from 'react-native';
+import { View, Text, Switch, TextInput, TouchableOpacity,Pressable, ActivityIndicator, TouchableHighlight, StyleSheet, Image, Alert, ImageBackground, KeyboardAvoidingView, Dimensions } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -16,7 +16,8 @@ import { Button } from '../components';
 import { Images, nowTheme } from '../constants';
 import { ScrollView } from 'react-native-gesture-handler';
 const { width, height } = Dimensions.get('screen');
-
+import { useTheme } from '@react-navigation/native';
+// import { useTheme } from '../ThemeContext';
 function LoginScreen(props) {
 
     const [email, setEmail] = useState('j.prasanna102@gmail.com');
@@ -26,8 +27,17 @@ function LoginScreen(props) {
     const [hidePass, setHidePass] = useState(true)
     const [passwordError, setPasswordError] = useState('');
     const [incorrectMsg, setIncorrectMsg] = useState('');
-    // const error = useSelector((state) => state.login.error);
+    const [animating, setAnimating] = useState(false);
     const dispatch = useDispatch();
+    const { colors } = useTheme();
+    //     const { isDarkMode, toggleTheme } = useTheme();
+
+    //   const screenStyle = {
+    //     backgroundColor: isDarkMode ? '#333' : '#fff',
+    //     color: isDarkMode ? '#fff' : '#333',
+    //   };
+
+    // const error = useSelector((state) => state.login.error);
     // useEffect(()=> {
     //     // SplashScreen.hide();
     //     SplashScreen.hide();
@@ -56,11 +66,20 @@ function LoginScreen(props) {
             setPasswordError('Password Required')
         }
     }
+
+    const closeActivityIndicator = () => {
+        setAnimating(true);
+        setTimeout(() => {
+            setAnimating(false);
+            navigation.navigate("Home");
+        }, 1000);
+    };
     const handleSignIn = () => {
         // navigation.navigate("Home")
         if (email === 'j.prasanna102@gmail.com' && password === 'pass@123') {
             // Alert.alert("Success", "Login Successfully")
-            navigation.navigate("Home")
+            closeActivityIndicator();
+            // navigation.navigate("Home")
         }
         else {
             Alert.alert("Error", "Login Failed")
@@ -100,7 +119,7 @@ function LoginScreen(props) {
 
     return (
         // <ScrollView>
-        <View style={styles.container}>
+        <View style={[styles.container,]}>
             <Block flex middle>
                 <ImageBackground
                     // source={Images.Onboarding}
@@ -112,7 +131,12 @@ function LoginScreen(props) {
                         <Image resizeMode={'cover'} source={require('../images/logo-rbg1.png')} />
                     </View>
                     {/* <View style={{ marginVertical: 45, paddingVertical: 55 }}> */}
+                    {/* <Button title="Toggle Theme" onPress={toggleTheme} /> */}
+                    {/* <Switch onPress={toggleTheme}/> */}
                     <View>
+                        {/* <TouchableOpacity style={{ backgroundColor: colors.card }}>
+                            <Text style={{ color: colors.text }}>Button!</Text>
+                        </TouchableOpacity> */}
                         <Card style={styles.mainCardView}>
                             <Text style={styles.title}>LOGIN</Text>
                             <Block style={{ marginVertical: 15 }}>
@@ -181,6 +205,12 @@ function LoginScreen(props) {
                                     </View>
                                 </TouchableHighlight>
                             </View>
+                            {handleSignIn && <ActivityIndicator
+                                animating={animating}
+                                color="#bc2b78"
+                                size="large"
+                                style={styles.activityIndicator}
+                            />}
                             {/* </ImageBackground> */}
                         </Card>
 
@@ -210,8 +240,8 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         alignItems: 'center',
         marginTop: 90,
-        paddingTop: 95,   
-        height: height*0.2,
+        paddingTop: 95,
+        height: height * 0.2,
         marginBottom: 15
         // marginBottom:5
         // paddingTop: 50

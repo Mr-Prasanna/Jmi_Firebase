@@ -1,23 +1,32 @@
 import React, { Component, useState, useMemo, useEffect } from "react";
 // import { View, Text, TouchableHighlight, BackHandler, StyleSheet } from 'react-native';
-import { FlatList, StyleSheet, Text, View, ActivityIndicator, TouchableHighlight, ImageBackground, Dimensions } from 'react-native';
-import BottomSheet from '@gorhom/bottom-sheet';
+import {  StyleSheet, Text, View, ActivityIndicator, TouchableHighlight, ImageBackground, Dimensions} from 'react-native';
+import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
+// import { BottomSheet } from 'react-native-btr';
 import { useNavigation } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import { ScrollView, FlatList } from 'react-native-gesture-handler';
 const { width, height } = Dimensions.get('screen');
 function About() {
 
     const [attendanceData, setAttendanceData] = useState([
         { name: 'Ajith', designation: 'React Developer', date: '2-01-2024', status: 'Approved' },
-        { name: 'Ajith', designation: 'React Developer', date: '10-02-2024', status: 'Pending' },
-        { name: 'Ajith', designation: 'React Developer', date: '20-02-2024', status: 'Pending' },
+        { name: 'Ajith', designation: 'React Developer', date: '28-01-2024', status: 'Approved' },
+        { name: 'Ajith', designation: 'React Developer', date: '5-02-2024', status: 'Approved' },
+        // { name: 'Ajith', designation: 'React Developer', date: '15-02-2024', status: 'Pending' },
+        // { name: 'Ajith', designation: 'React Developer', date: '21-02-2024', status: 'Pending' },
+        // { name: 'Ajith', designation: 'React Developer', date: '28-02-2024', status: 'Approved' },
+        // { name: 'Ajith', designation: 'React Developer', date: '15-02-2024', status: 'Pending' },
     ]);
     const snapPoints = useMemo(() => ['25%', '50%', '70%', '90'], []);
     const navigation = useNavigation();
     const [animating, setAnimating] = useState(true);
 
-     const closeActivityIndicator = () => {
+    const toggleBottomNavigationView = () => {
+        closeActivityIndicator();
+        setVisible(!visible);
+      };
+    const closeActivityIndicator = () => {
         setTimeout(() => {
             setAnimating(false)
         }, 3000)
@@ -26,66 +35,82 @@ function About() {
         closeActivityIndicator(), []
     });
     const handlePrevScreen = () => {
-        // navigation.navigate('Show timesheet')
-        navigation.navigate('Settings')
+        navigation.navigate('Show timesheet');
     }
 
     return (
         // <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor:'#9dfc03'}}>
         //     <Text>About Screen</Text>
         //  </View>
+        // <ScrollView>
         <View style={styles.container}>
 
             <ImageBackground
                 source={require('./../../images/registerImg.jpg')}
                 style={styles.imageBackgroundContainer}
                 imageStyle={styles.imageBackground}>
+                <View style={{ flexDirection: 'row' }}>
+                    <View style={styles.submitevent}>
+                        <TouchableHighlight onPress={handlePrevScreen}>
+                            <View style={styles.button}>
+                                <Text style={{ color: 'white', fontWeight: '700' }}></Text>
+                                <MaterialCommunityIcons name='arrow-left-circle' color={'white'} size={30} style={styles.Icon} />
+                            </View>
+
+                        </TouchableHighlight>
+                    </View>
+                    <Text style={styles.title}>ATTENDANCE DETAILS</Text>
+
                 
-                <Text style={styles.title}>ATTENDANCE DETAILS</Text>
-                <View>
-                <ActivityIndicator
-                    animating={animating}
-                    color="#bc2b78"
-                    size="large"
-                    style={styles.activityIndicator}
-                />
                 </View>
-                {!animating &&<BottomSheet index={3} snapPoints={snapPoints}>
+
+                <View style={styles.activityContainer}>
+                    <ActivityIndicator
+                        animating={animating}
+                        color="#bc2b78"
+                        size="large"
+                        style={styles.activityIndicator}
+                    />
+                </View>                
+                {!animating && <BottomSheet index={3} snapPoints={snapPoints}>
+                <ScrollView  contentContainerStyle={{ flexGrow:1 ,   justifyContent: 'space-between'}}>
                     <ImageBackground
                         source={require('./../../images/registerImg.jpg')}
                         style={styles.imageBackgroundContainer}
                         imageStyle={styles.imageBackground}
                     >
                         {/* <Text style={styles.title}>ATTENDANCE DETAILS</Text> */}
-                        <View>
-                            <FlatList
-                                data={attendanceData}
-                                // data={[
-                                //     { name: 'Ajith', designation: 'Developer',date: '10-02-2024' ,status: 'Pending' },
-                                // ]}
-                                //    renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
-                                renderItem={renderItemUI}
-                            />
-                        </View>
-                        <View style={styles.submitevent}>
-                            <TouchableHighlight onPress={handlePrevScreen}>{/*handleSearch */}
+                            {/* <ScrollView> */}
+                            <View>
+                            {/* <ScrollView  contentContainerStyle={{ flexGrow:1 ,   justifyContent: 'space-between'}}> */}
+                                <FlatList
+                                    data={attendanceData}
+                                    // data={[
+                                    //     { name: 'Ajith', designation: 'Developer',date: '10-02-2024' ,status: 'Pending' },
+                                    // ]}
+                                    //    renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
+                                    renderItem={renderItemUI}
+                                />
+                            {/* </ScrollView> */}
+                            </View>
+                            {/* </ScrollView> */}
+                        {/*handleSearch */}
+                        {/* <View style={styles.submitevent}>
+                            <TouchableHighlight onPress={handlePrevScreen}>
                                 <View style={styles.button}>
                                     <Text style={{ color: 'white', fontWeight: '700' }}></Text>
                                     <MaterialCommunityIcons name='arrow-left-circle' color={'white'} size={24} style={styles.Icon} />
                                 </View>
 
                             </TouchableHighlight>
-                        </View>
+                        </View> */}
 
                     </ImageBackground>
-                </BottomSheet>}
+                    </ScrollView>
+                </BottomSheet>}             
             </ImageBackground>
         </View>
     )
-
-
-
-
 }
 const renderItemUI = ({ item }) => {
     return (
@@ -140,23 +165,29 @@ const styles = StyleSheet.create({
         // color: '#f0b20a'
         // color:'#d41b0b'
     },
+    activityContainer:{
+        flex:0.5,
+        justifyContent:'center',
+        alignItems:'center',
+        // height:50
+      },
     activityIndicator: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         height: 80,
-      },
+    },
     submitevent: {
         // flexDirection: 'row',
         // justifyContent: 'space-between',
         // alignContent: 'space-around',
         // alignSelf: 'flex-end',
-        alignSelf:'center',
-        marginHorizontal: 20,
-        marginTop: 10,
+        alignSelf: 'center',
+        marginHorizontal: 10,
+        marginTop: 5,
         paddingTop: 5,
         fontSize: 30,
-        alignItems:'center'
+        alignItems: 'center'
         // alignItems: 'flex-end',
         // backgroundColor:'orange'
         // borderCurve:20
@@ -164,8 +195,8 @@ const styles = StyleSheet.create({
     },
     button: {
         alignItems: "center",
-        alignSelf:"center",
-        backgroundColor: '#eb692d',
+        alignSelf: "center",
+        // backgroundColor: '#eb692d',
         // backgroundColor: 'white',
         //color: '#fafaf7',
         color: 'white',
@@ -173,7 +204,7 @@ const styles = StyleSheet.create({
         //fontWeight: '200',
         // paddingHorizontal: 50,
         paddingHorizontal: 20,
-        paddingVertical: 10,
+        paddingVertical: 15,
         alignItems: 'flex-end',
         borderRadius: 21.5,
 

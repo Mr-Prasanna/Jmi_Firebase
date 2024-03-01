@@ -48,7 +48,7 @@ export default function MyTabs() {
                 tabBarLabelStyle:({fontSize:13, fontWeight:'500',color:'#000'})
             }}
             />
-                <Tab.Screen name="Settings" 
+                {/* <Tab.Screen name="Settings" 
                 component={Settings} 
                 options={{
                     tabBarLabel: 'Settings',
@@ -57,7 +57,7 @@ export default function MyTabs() {
                         ),
                         tabBarLabelStyle:({fontSize:15, fontWeight:'500',color:'#000'})
                 }}
-                />
+                /> */}
         </Tab.Navigator>
     )
 }

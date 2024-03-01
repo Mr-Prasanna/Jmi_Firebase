@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "1006956391946",
+    "project_id": "rn-push-notification-1c82e",
+    "storage_bucket": "rn-push-notification-1c82e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1006956391946:android:1230f9b0df3e7a8cc5b9f3",
+        "android_client_info": {
+          "package_name": "com.jm_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD72_csDvfddW5pyfAWPbkSrtmFeIoJ4Vw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1006956391946:android:b94ce252ef6593afc5b9f3",
+        "android_client_info": {
+          "package_name": "com.jmi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD72_csDvfddW5pyfAWPbkSrtmFeIoJ4Vw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1006956391946:android:1dd1c3dea486f813c5b9f3",
+        "android_client_info": {
+          "package_name": "react.jmi.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD72_csDvfddW5pyfAWPbkSrtmFeIoJ4Vw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

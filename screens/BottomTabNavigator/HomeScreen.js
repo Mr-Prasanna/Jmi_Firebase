@@ -8,6 +8,7 @@ import { BIRTHDAY_LIST_API } from "../../apis/api";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import { Images, nowTheme } from '../../constants';
 import { SHOW_BIRTHDAY_LIST, showBirthdayDetails } from "../../actions/birthdayAction";
+import { useTheme } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('screen');
 function Home() {
@@ -15,6 +16,8 @@ function Home() {
     const [empDetails, setEmpDetails] = useState('');
     // const [dob,SetDob]=useState('');
     const dispatch = useDispatch();
+    // const { colors } = useTheme();
+    // const theme = useTheme();
     const handleLogin = () => {
         navigation.navigate('Login');
     }
@@ -53,7 +56,8 @@ function Home() {
         <ScrollView flex={1} contentContainerStyle={{ flexGrow: 1 }}>
             <View style={styles.container}>
                 <ImageBackground
-                    source={Images.Onboarding}
+                    // source={Images.Onboarding}
+                    source={require('./../../images/registerImg.jpg')}
                     style={{ flex: 1, height: height, width, zIndex: 1 }}
                 >
                     <View style={{ margin: 15 }}>
