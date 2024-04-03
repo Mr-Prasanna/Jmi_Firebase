@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { Component, useEffect, useState,useContext } from "react";
 import { View, Text, Image, TouchableHighlight, BackHandler, StyleSheet, ImageBackground, Dimensions } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { Card } from "react-native-paper";
@@ -10,8 +10,15 @@ import { Images, nowTheme } from '../../constants';
 import { SHOW_BIRTHDAY_LIST, showBirthdayDetails } from "../../actions/birthdayAction";
 import { useTheme } from '@react-navigation/native';
 
+import { colors } from "../../config/theme";
+import { ThemeContext } from "../../context/ThemeContext";
+
 const { width, height } = Dimensions.get('screen');
-function Home() {
+function Home(isActive) {
+
+    const { theme } = useContext(ThemeContext);
+    let activeColors = colors[theme.mode];
+
     const navigation = useNavigation();
     const [empDetails, setEmpDetails] = useState('');
     // const [dob,SetDob]=useState('');
@@ -62,21 +69,21 @@ function Home() {
                 >
                     <View style={{ margin: 15 }}>
 
-                        <Card style={{backgroundColor:'white'}}>
+                        <Card style={{backgroundColor: isActive ? activeColors.primary : activeColors.text}}>
                             <View>
-                                <Text style={styles.birthTitle}>Birthdays</Text>
+                                <Text style={[styles.birthTitle,{color: isActive ? activeColors.text : activeColors.primary}]}>Birthdays</Text>
                             </View>
                             <View style={styles.birthdayDetails}>
                                 <View style={styles.contents}>
                                     <Image source={require('./../../images/userProfile.jpg')} style={styles.imagesize} />
                                     <Text style={styles.contents}>KUMAR</Text>
-                                    <Text style={styles.contentsDate}>17 February</Text>
+                                    <Text style={[styles.contentsDate ,{color: isActive ? activeColors.text : activeColors.primary}]}>17 February</Text>
                                     {/* <Text style={styles.contents}>Year</Text> */}
                                 </View>
                                 <View>
                                     <Image source={require('./../../images/userProfile.jpg')} style={styles.imagesize} />
                                     <Text style={styles.contents}>DINESH</Text>
-                                    <Text style={styles.contentsDate}>22 February</Text>
+                                    <Text style={[styles.contentsDate,{color: isActive ? activeColors.text : activeColors.primary}]}>22 February</Text>
                                     {/* <Text style={styles.contents}>Year</Text> */}
                                 </View>
 
@@ -91,20 +98,41 @@ function Home() {
                             </View> */}
                         </Card>
                     </View>
-
-
-                    <View style={{ marginVertical: 25, margin: 15 }}>
+                    <View style={{ marginVertical: 25, margin: 15,backgroundColor: isActive ? activeColors.primary : activeColors.text}}>
                         <Calendar
-                            style={styles.calenderStyle}
+                    theme={{
+                        // backgroundColor:'green',
+                        calendarBackground:{
+                            backgroundColor: isActive ? activeColors.primary : activeColors.text,
+                            color: isActive ? activeColors.text : activeColors.primary,
+                        },
+                       dayTextColor:'#2877ed',
+                        // contentStyle:'black',
+                        // monthTextColor:isActive?activeColors.text:activeColors.primary,
+                        
+                        //monthTextColor:{color: isActive ? activeColors.text : activeColors.primary},
+                        // dayTextColor:{color: isActive ? activeColors.primary : activeColors.text},
+                        // dayTextColor:{color: isActive ? activeColors.text : activeColors.primary},
+                        todayBackgroundColor:'yellow'
+                    }}
+                        // theme={{backgroundColor:'blue'}}
+                             style={[styles.calenderStyle,
+                                // {color: isActive ? activeColors.text : activeColors.primary},
+                                // {backgroundColor: isActive ? activeColors.primary : activeColors.text}
+                            ]}
                         />
                     </View>
                     <View>
                         {/* <View style={{backgroundColor:'white' }}> */}
-                        <Card style={{ padding: 10, marginHorizontal: 15, backgroundColor: 'white', color: 'black' }}>
+                        <Card style={{ padding: 10, marginHorizontal: 15, backgroundColor: isActive ? activeColors.primary : activeColors.text, color: 'black' }}>
                             <View style={{ paddingHorizontal: 10 }}>
-                                <Text style={styles.announcementTitle}>Announcements</Text>
-                                <Text style={styles.announcementContent}>Expenses bills to be claimed every month</Text>
-                                <Text style={styles.announcementContent}>All of you are requested to submit all leave/time sheets every week</Text>
+                                <Text style={[styles.announcementTitle,
+                                {color: isActive ? activeColors.text : activeColors.primary},
+                ]}>Announcements</Text>
+                                <Text style={[styles.announcementContent,{color: isActive ? activeColors.text : activeColors.primary},
+                ]}>Expenses bills to be claimed every month</Text>
+                                <Text style={[styles.announcementContent,{color: isActive ? activeColors.text : activeColors.primary},
+                ]}>All of you are requested to submit all leave/time sheets every week</Text>
                             </View>
                         </Card>
                     </View>
@@ -146,13 +174,6 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         borderRadius: 10,
         flexDirection: "row"
-        // backgroundColor: "#776B5D",
-        // backgroundColor: '#F9E8D9'
-        // backgroundColor: '#E26EE5',
-        // marginBottom:200,
-        // paddingTop:20,
-        // marginHorizontal: 10,
-        // elevation: 5,
     },
     calenderStyle: {
         borderRadius: 10,
@@ -174,7 +195,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 5,
         fontWeight:'400',
-        color:'black',
+        //color: isActive ? activeColors.text : activeColors.primary,
+        // color:'black',
     
     },
     birthdayDetails: {

@@ -1,13 +1,23 @@
-import React, { Component, useState, useMemo, useEffect } from "react";
+import React, { Component, useState, useContext, useMemo, useEffect } from "react";
 // import { View, Text, TouchableHighlight, BackHandler, StyleSheet } from 'react-native';
-import {  StyleSheet, Text, View, ActivityIndicator, TouchableHighlight, ImageBackground, Dimensions} from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator, TouchableHighlight, ImageBackground, Dimensions } from 'react-native';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 // import { BottomSheet } from 'react-native-btr';
 import { useNavigation } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
+// import { useTheme } from '@react-navigation/native';
+// import { useTheme } from '../../themeContext';
+
+import { colors } from "../../config/theme";
+import { ThemeContext } from "../../context/ThemeContext";
+import UserDataCard from "./UserDataCard";
 const { width, height } = Dimensions.get('screen');
-function About() {
+
+// import useThemeContext from '../../themes/util/useThemeContext';
+function About(isActive) {
+    const { theme } = useContext(ThemeContext);
+    const activeColors = colors[theme.mode];
 
     const [attendanceData, setAttendanceData] = useState([
         { name: 'Ajith', designation: 'React Developer', date: '2-01-2024', status: 'Approved' },
@@ -21,11 +31,12 @@ function About() {
     const snapPoints = useMemo(() => ['25%', '50%', '70%', '90'], []);
     const navigation = useNavigation();
     const [animating, setAnimating] = useState(true);
+    // const { colors } = useTheme();
 
     const toggleBottomNavigationView = () => {
         closeActivityIndicator();
         setVisible(!visible);
-      };
+    };
     const closeActivityIndicator = () => {
         setTimeout(() => {
             setAnimating(false)
@@ -43,12 +54,12 @@ function About() {
         //     <Text>About Screen</Text>
         //  </View>
         // <ScrollView>
-        <View style={styles.container}>
-
+        <View style={[styles.container]}>
             <ImageBackground
                 source={require('./../../images/registerImg.jpg')}
                 style={styles.imageBackgroundContainer}
-                imageStyle={styles.imageBackground}>
+                // imageStyle={styles.imageBackground}
+                >
                 <View style={{ flexDirection: 'row' }}>
                     <View style={styles.submitevent}>
                         <TouchableHighlight onPress={handlePrevScreen}>
@@ -61,41 +72,63 @@ function About() {
                     </View>
                     <Text style={styles.title}>ATTENDANCE DETAILS</Text>
 
-                
+
                 </View>
 
                 <View style={styles.activityContainer}>
                     <ActivityIndicator
                         animating={animating}
-                        color="#bc2b78"
+                        // color="#bc2b78"
+                        color="#f2711b"
                         size="large"
                         style={styles.activityIndicator}
                     />
-                </View>                
+                </View>
                 {!animating && <BottomSheet index={3} snapPoints={snapPoints}>
-                <ScrollView  contentContainerStyle={{ flexGrow:1 ,   justifyContent: 'space-between'}}>
-                    <ImageBackground
-                        source={require('./../../images/registerImg.jpg')}
-                        style={styles.imageBackgroundContainer}
-                        imageStyle={styles.imageBackground}
-                    >
-                        {/* <Text style={styles.title}>ATTENDANCE DETAILS</Text> */}
+                    <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'space-between' }}>
+                        <ImageBackground
+                            source={require('./../../images/registerImg.jpg')}
+                            style={styles.imageBackgroundContainer}
+                            imageStyle={styles.imageBackground}
+                        >
+                            {/* <Text style={styles.title}>ATTENDANCE DETAILS</Text> */}
                             {/* <ScrollView> */}
                             <View>
-                            {/* <ScrollView  contentContainerStyle={{ flexGrow:1 ,   justifyContent: 'space-between'}}> */}
+                                {/* <ScrollView  contentContainerStyle={{ flexGrow:1 ,   justifyContent: 'space-between'}}> */}
                                 <FlatList
                                     data={attendanceData}
                                     // data={[
                                     //     { name: 'Ajith', designation: 'Developer',date: '10-02-2024' ,status: 'Pending' },
                                     // ]}
                                     //    renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
-                                    renderItem={renderItemUI}
+                                    //renderItem={renderItemUI}
+                                    renderItem={({item}) =>
+                                    <View style={{ backgroundColor: isActive ? activeColors.primary : activeColors.text, padding: 10, borderColor: 'black', borderWidth: 1, margin: 10, marginHorizontal: 15, borderRadius: 10 }}>
+                                    <View style={styles.renderItemView}>
+                                        <Text style={[styles.renderItemText,{color: isActive ? activeColors.text : activeColors.primary }]}>Name :</Text>
+                                        <Text style={[styles.renderItemText,{marginLeft: 55, paddingLeft: 55,color: isActive ? activeColors.text : activeColors.primary }]}>{item.name}</Text>
+                                    </View>
+                                    <View style={styles.renderItemView}>
+                                        <Text style={[styles.renderItemText,{ color: isActive ? activeColors.text : activeColors.primary }]}>Designation :</Text>
+                                        <Text style={[styles.renderItemText,{ marginLeft: 25, paddingLeft: 35,color: isActive ? activeColors.text : activeColors.primary }]}>{item.designation}</Text>
+                                    </View>
+                                    <View style={styles.renderItemView}>
+                                        <Text style={[styles.renderItemText,{ color: isActive ? activeColors.text : activeColors.primary }]}>Date :</Text>
+                                        <Text style={[styles.renderItemText,{ fontSize: 18, fontWeight: 'bold', marginLeft: 60, paddingLeft: 60,color: isActive ? activeColors.text : activeColors.primary }]}>{item.date}</Text>
+                                    </View>
+                                    <View style={styles.renderItemView}>
+                                        <Text style={[styles.renderItemText,{ color: isActive ? activeColors.text : activeColors.primary}]}>Status :</Text>
+                                        <Text style={[styles.renderItemText,{ color: isActive ? activeColors.text : activeColors.primary,marginLeft: 60, paddingLeft: 45 }]}>{item.status}</Text>
+                                    </View>
+                                </View> 
+                                   }
+
                                 />
-                            {/* </ScrollView> */}
+                                {/* </ScrollView> */}
                             </View>
                             {/* </ScrollView> */}
-                        {/*handleSearch */}
-                        {/* <View style={styles.submitevent}>
+                            {/*handleSearch */}
+                            {/* <View style={styles.submitevent}>
                             <TouchableHighlight onPress={handlePrevScreen}>
                                 <View style={styles.button}>
                                     <Text style={{ color: 'white', fontWeight: '700' }}></Text>
@@ -105,40 +138,43 @@ function About() {
                             </TouchableHighlight>
                         </View> */}
 
-                    </ImageBackground>
+                        </ImageBackground>
                     </ScrollView>
-                </BottomSheet>}             
+                </BottomSheet>}
             </ImageBackground>
         </View>
     )
 }
-const renderItemUI = ({ item }) => {
-    return (
-        <View style={{ backgroundColor: 'white', padding: 10, borderColor: 'black', borderWidth: 1, margin: 10, marginHorizontal: 15, borderRadius: 10 }}>
-            <View style={{ flexDirection: 'row', marginHorizontal: 15 }}>
-                <Text style={{ fontSize: 18, fontWeight: 'bold', }}>Name :</Text>
-                <Text style={{ fontSize: 18, fontWeight: 'bold', marginLeft: 55, paddingLeft: 55 }}>{item.name}</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginHorizontal: 15 }}>
-                <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Designation :</Text>
-                <Text style={{ fontSize: 18, fontWeight: 'bold', marginLeft: 25, paddingLeft: 35 }}>{item.designation}</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginHorizontal: 15 }}>
-                <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Date :</Text>
-                <Text style={{ fontSize: 18, fontWeight: 'bold', marginLeft: 60, paddingLeft: 60 }}>{item.date}</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginHorizontal: 15 }}>
-                <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Status :</Text>
-                <Text style={{ fontSize: 18, fontWeight: 'bold', marginLeft: 60, paddingLeft: 45 }}>{item.status}</Text>
-            </View>
-        </View>)
-}
+// const renderItemUI = ({ item }, isActive) => {
+   
+//     return (
+//         // <UserDataCard/>
+//         <View style={{ backgroundColor: isActive ? activeColors.primary : activeColors.text, padding: 10, borderColor: 'black', borderWidth: 1, margin: 10, marginHorizontal: 15, borderRadius: 10 }}>
+//             <View style={{ flexDirection: 'row', marginHorizontal: 15 }}>
+//                 <Text style={{ fontSize: 18, fontWeight: 'bold', }}>Name :</Text>
+//                 <Text style={{ fontSize: 18, fontWeight: 'bold', marginLeft: 55, paddingLeft: 55 }}>{item.name}</Text>
+//             </View>
+//             <View style={{ flexDirection: 'row', marginHorizontal: 15 }}>
+//                 <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Designation :</Text>
+//                 <Text style={{ fontSize: 18, fontWeight: 'bold', marginLeft: 25, paddingLeft: 35 }}>{item.designation}</Text>
+//             </View>
+//             <View style={{ flexDirection: 'row', marginHorizontal: 15 }}>
+//                 <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Date :</Text>
+//                 <Text style={{ fontSize: 18, fontWeight: 'bold', marginLeft: 60, paddingLeft: 60 }}>{item.date}</Text>
+//             </View>
+//             <View style={{ flexDirection: 'row', marginHorizontal: 15 }}>
+//                 <Text style={{ color: isDarkMode ? 'white' : 'black',fontSize: 18, fontWeight: 'bold' }}>Status :</Text>
+//                 <Text style={{ color: isDarkMode ? 'white' : 'black',fontSize: 18, fontWeight: 'bold', marginLeft: 60, paddingLeft: 45 }}>{item.status}</Text>
+//             </View>
+//         </View>
+//     )
+// }
 
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 22,
+        // paddingTop: 22,
         // backgroundColor: '#80746b'
     },
     item: {
@@ -165,12 +201,12 @@ const styles = StyleSheet.create({
         // color: '#f0b20a'
         // color:'#d41b0b'
     },
-    activityContainer:{
-        flex:0.5,
-        justifyContent:'center',
-        alignItems:'center',
+    activityContainer: {
+        flex: 0.5,
+        justifyContent: 'center',
+        alignItems: 'center',
         // height:50
-      },
+    },
     activityIndicator: {
         flex: 1,
         justifyContent: 'center',
@@ -219,6 +255,14 @@ const styles = StyleSheet.create({
         // justifyContent:'center'
 
     },
+    renderItemView:{
+        flexDirection: 'row',
+         marginHorizontal: 15 
+    },
+    renderItemText:{
+        fontSize: 18,
+        fontWeight: 'bold'
+    }
 
 });
 export default About;

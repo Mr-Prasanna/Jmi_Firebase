@@ -1,5 +1,23 @@
 import messaging from '@react-native-firebase/messaging';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+
+  export const sendFcmToken = async () => {
+  try {
+    await messaging().registerDeviceForRemoteMessages();
+    const token = await messaging().getToken();
+    console.log("Token fcm : ",token)
+   const registerApi= axios.post('http://192.168.60.247:8080/register', {token});//192.168.60.247
+   console.log("api works",registerApi)
+    await axios.post('http://192.168.60.247:8080/register', {token});
+  } catch (err) {
+    //Do nothing
+    console.log(err.response.data);
+    return;
+  }
+};
+
+
 export async function requestUserPermission() {
   const authStatus = await messaging().requestPermission();
   const enabled =
@@ -45,9 +63,23 @@ messaging()
   }
 
 });
-messaging().onMessage(async remoteMessage =>{
-  console.log("notification on foreground state.....",remoteMessage)
-})
+// messaging().onMessage(async remoteMessage =>{
+//   console.log("notification on foreground state.....",remoteMessage)
+// })
 }
 
+
+
+// export const requestUserPermissions = async () => {
+//   const authorizationStatus = await messaging().requestPermission();
+
+//   if (authorizationStatus) {
+//     // Register App with FCM
+//     await messaging().registerDeviceForRemoteMessages();
+    
+//     // Generate FCM Token
+//     await messaging().getToken();
+//     console.log("Authorization Status - ", authorizationStatus);
+//   }
+// };
 

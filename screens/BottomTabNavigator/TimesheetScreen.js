@@ -1,6 +1,6 @@
 import React, { Component, useState } from "react";
 // import { View, Text, TextInput, Image, TouchableHighlight, BackHandler, StyleSheet, Alert } from 'react-native';
-import { View, StyleSheet, TextInput, TouchableHighlight,ImageBackground, Dimensions, StatusBar, TouchableWithoutFeedback, Keyboard, SafeAreaView,ScrollView} from 'react-native';
+import { View, StyleSheet, TextInput, TouchableHighlight, ImageBackground, Dimensions, StatusBar, TouchableWithoutFeedback, Keyboard, SafeAreaView, ScrollView } from 'react-native';
 import DropDownPicker from "react-native-dropdown-picker";
 import { DatePickerInput, LocaleProvider } from "react-native-paper-dates";
 import moment from 'moment';
@@ -13,14 +13,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Block, Checkbox, Text, Button as GaButton, theme, Icon } from 'galio-framework';
 import { Images, nowTheme } from '../../constants';
 // import { Button, Icon, Input } from '../../components';
-import { Button, Input } from '../../components';
+// import { Button, Input } from '../../components';
+import { DatePicker } from "../../components/datepicker/DatePicker";
 // import { ScrollView } from "react-native-gesture-handler";
-
+import { Input } from "../../components/InputFeild/Input";
 const { width, height } = Dimensions.get('screen');
 
-const DismissKeyboard = ({ children }) => (
-  <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
-);
+// const DismissKeyboard = ({ children }) => (
+//   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
+// );
 
 export default function TimeSheet() {
   const [empId, setEmpId] = useState('');
@@ -80,9 +81,9 @@ export default function TimeSheet() {
     else {
       setFromDateError('* From Date feild is required !!!');
     }
-    if(toDate !== null){
+    if (toDate !== null) {
       setToDateError('');
-    }else{
+    } else {
       setToDateError('* To Date feild is required !!!')
     }
     if (values !== null) {
@@ -139,19 +140,19 @@ export default function TimeSheet() {
   }
   return (
     <ScrollView>
-    <View style={styles.container}>
-      <ImageBackground
-        source={require('./../../images/registerImg.jpg')}
-        style={styles.imageBackgroundContainer}
-        imageStyle={styles.imageBackground}
-      >
-        <View>
-          <Text style={styles.title}>ADD ATTENDANCE</Text>
-        </View>
-        <Block  style={styles.mainCardView}>
-          <View style={styles.blockView}>
+      <View style={styles.container}>
+        <ImageBackground
+          source={require('./../../images/registerImg.jpg')}
+          style={styles.imageBackgroundContainer}
+          imageStyle={styles.imageBackground}
+        >
+          <View>
+            <Text style={styles.title}>ADD ATTENDANCE</Text>
+          </View>
+          <Block style={styles.mainCardView}>
+            <View style={styles.blockView}>
 
-            <TextInput
+              {/* <TextInput
               style={styles.textInputs}
               onChangeText={(value) => setEmpId(value)}
               keyboardType = 'numeric'
@@ -159,115 +160,161 @@ export default function TimeSheet() {
               placeholder="Employee ID"
               placeholderTextColor='#666569'
               onChange={handleValidate}
-            />
+            /> */}
+              <Input
+              style={styles.textInputs}
+                value={empId}
+                placeholder="Employee ID"
+                keyboardType='numeric'
+                onChangeText={(value) => setEmpId(value)}
+                onChange={handleValidate}
+              />
 
-          </View>
-          <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20, paddingTop: 5 }}>{empIdError}</Text>
-          {/* {empIdError && <Text style={{ color: 'red', marginLeft: 15, paddingLeft: 15 }}>{empIdError}</Text>} */}
-          
-          <View style={styles.blockView}>
+            </View>
+            <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20, paddingTop: 5 }}>{empIdError}</Text>
+            {/* {empIdError && <Text style={{ color: 'red', marginLeft: 15, paddingLeft: 15 }}>{empIdError}</Text>} */}
 
-            <TextInput
+            <View style={styles.blockView}>
+
+              {/* <TextInput
               style={styles.textInputs}
               onChangeText={(value) => setEmpName(value)}
               value={empName}
               placeholder="Employee Name"
               placeholderTextColor='#666569'
               onChange={handleValidate}
-            />
+            /> */}
+              <Input
+              style={styles.textInputs}
+                value={empName}
+                placeholder="Employee Name"
+                onChangeText={(value) => setEmpName(value)}
+                onChange={handleValidate}
 
-          </View>
-          <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20, paddingTop: 5 }}>{empNameError}</Text>
-          {/* {empNameError && <Text style={{ color: 'red', marginLeft: 15, paddingLeft: 15 }}>{empIdError}</Text>} */}
-     
-          <View style={styles.blockView}>
+              />
 
-            <TextInput
+
+            </View>
+            <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20, paddingTop: 5 }}>{empNameError}</Text>
+            {/* {empNameError && <Text style={{ color: 'red', marginLeft: 15, paddingLeft: 15 }}>{empIdError}</Text>} */}
+
+            <View style={styles.blockView}>
+
+              {/* <TextInput
               style={styles.textInputs}
               onChangeText={(value) => setDesignation(value)}
               value={designation}
               placeholder="Designation"
               placeholderTextColor='#666569'
               onChange={handleValidate}
-            />
+            /> */}
 
-          </View>
-          <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20, paddingTop: 5 }}>{designationError}</Text>
+              <Input
+              style={styles.textInputs}
+                value={designation}
+                placeholder="Designation"
+                onChangeText={(value) => setDesignation(value)}
+                onChange={handleValidate}
+              />
+            </View>
+            <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20, paddingTop: 5 }}>{designationError}</Text>
 
-          {/* {designationError && <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20,paddingTop:5  }}>{designationError}</Text>} */}
-          <Block width={width * 0.8} style={{ marginBottom: 5, paddingBottom: 0, marginTop: 0, alignSelf:'center'}}>
-            <DropDownPicker
-              open={openItem}
-              value={values}
-              items={items}
-              setOpen={setOpenItem}
-              setValue={setValues}
-              // onChange={handleValidate}
-              setItems={setItems}
-              placeholder="Select Leave Type"
-              placeholderTextColor='#232423'
-              //  baseColor='#232423'
-              textStyle={{color:'#232423'}}
-              style={styles.dropdownInputs}
-              dropDownDirection="BOTTOM"
-            // dropDownContainerStyle={{ height: 20 }}
-            />
-          </Block>
-          <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20, marginTop: 0, fontStyle: 'bold' }}>{valuesError}</Text>
+            {/* {designationError && <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20,paddingTop:5  }}>{designationError}</Text>} */}
+            <Block width={width * 0.8} style={{ marginBottom: 5, paddingBottom: 0, marginTop: 0, alignSelf: 'center' }}>
+              <DropDownPicker
+                open={openItem}
+                value={values}
+                items={items}
+                setOpen={setOpenItem}
+                setValue={setValues}
+                // onChange={handleValidate}
+                setItems={setItems}
+                placeholder="Select Leave Type"
+                placeholderTextColor='#232423'
+                //  baseColor='#232423'
+                textStyle={{ color: '#232423' }}
+                style={styles.dropdownInputs}
+                dropDownDirection="BOTTOM"
+              // dropDownContainerStyle={{ height: 20 }}
+              />
+            </Block>
+            <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20, marginTop: 0, fontStyle: 'bold' }}>{valuesError}</Text>
 
-          {/* {valuesError && <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20, marginTop: 0, fontStyle: 'bold' }}>{valuesError}</Text>} */}
+            {/* {valuesError && <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20, marginTop: 0, fontStyle: 'bold' }}>{valuesError}</Text>} */}
 
-          <Block width={width * 0.8} style={{ marginBottom: 10, marginTop: 30, alignSelf:'center'}}>
-            <DatePickerInput
-              style={styles.datepickerInputs}
-              locale="en"
-              value={fromDate}
-              label="From date"
-              onChange={(d) => setFromDate(d)}
-              inputMode="start"
-            />
-          </Block>
-          <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20, marginTop: 20 }}>{fromDateError}</Text>
+            <Block width={width * 0.8} style={{ marginBottom: 10, marginTop: 30, alignSelf: 'center' }}>
+              <DatePickerInput
+                style={styles.datepickerInputs}
+                locale="en"
+                value={fromDate}
+                label="From date"
+                onChange={(d) => setFromDate(d)}
+                inputMode="start"
+              />
 
-          <Block width={width * 0.8} style={{ marginBottom: 25, marginTop: 30, alignSelf:'center'}}> 
-            <DatePickerInput
-              style={styles.datepickerInputs}
-              locale="en"
-              value={toDate}
-              label="To date"
-              onChange={(d) => setToDate(d)}
-              inputMode="start"
+              {/* <DatePicker
+                value={fromDate}
+                // locale={'en'}
+                // label={'From date'}
+                onChange={(d) => setFromDate(d)}
+              /> */}
+            </Block>
+            <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20, marginTop: 20 }}>{fromDateError}</Text>
 
-            />
-          </Block>
-          <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20, paddingTop: 5 }}>{toDateError}</Text>
+            <Block width={width * 0.8} style={{ marginBottom: 25, marginTop: 30, alignSelf: 'center' }}>
+              <DatePickerInput
+                style={styles.datepickerInputs}
+                locale="en"
+                value={toDate}
+                label="To date"
+                onChange={(d) => setToDate(d)}
+                inputMode="start"
 
-          <View style={styles.blockView}>
-            <TextInput
+              />
+              {/* <DatePicker
+             value={toDate}
+             locale="en"
+             label="To date"
+             placeholder="To Date"
+             onChange={(d) => setToDate(d)}
+            /> */}
+            </Block>
+            <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20, paddingTop: 5 }}>{toDateError}</Text>
+
+            <View style={styles.blockView}>
+              {/* <TextInput
               style={styles.textInputs}
               onChangeText={(value) => setTask(value)}
               value={task}
               placeholder="Task"
               placeholderTextColor='#666569'
               onChange={handleValidate}
-            />
+            /> */}
+              <Input
+              style={styles.textInputs}
+                value={task}
+                placeholder="Task"
+                onChangeText={(value) => setTask(value)}
+                onChange={handleValidate}
 
-          </View>
-          <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20, paddingTop: 5 }}>{taskError}</Text>
-          {/* { taskError &&<Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20 ,paddingTop:5}}>{taskError}</Text>} */}
-          <View style={styles.submitevent}>
-            <TouchableHighlight onPress={handleAddAttendance}>
-              <View style={styles.button}>
-                <Text style={{ color: 'white', fontWeight: '700' }}>SUBMIT</Text>
-              </View>
-            </TouchableHighlight>
-          </View>
-        </Block>
-      </ImageBackground>
-    </View>
-  </ScrollView>
+              />
 
-  
+            </View>
+            <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20, paddingTop: 5 }}>{taskError}</Text>
+            {/* { taskError &&<Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20 ,paddingTop:5}}>{taskError}</Text>} */}
+            <View style={styles.submitevent}>
+              <TouchableHighlight onPress={handleAddAttendance}>
+                <View style={styles.button}>
+                  <Text style={{ color: 'white', fontWeight: '700' }}>SUBMIT</Text>
+                </View>
+              </TouchableHighlight>
+            </View>
+          </Block>
+        </ImageBackground>
+      </View>
+    </ScrollView>
+
+
 
   )
 }
@@ -292,7 +339,7 @@ const styles = StyleSheet.create({
     width: width * 0.8,
     marginBottom: 0,
     marginTop: 10,
-    alignSelf:'center'
+    alignSelf: 'center'
     // marginBottom: 10,
     // marginTop: 30
 
@@ -323,15 +370,11 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     height: 47,
     placeholderTextColor: 'black',
-    alignSelf:'center',
-    //color:'red',
-
-    // marginHorizontal:10
+    alignSelf: 'center',
     marginVerticle: 15,
     paddingVertical: 0,
     fontSize: 14,
     paddingTop: 0
-    // backgroundColor:'grey'
   },
   body: {
     justifyContent: "center",

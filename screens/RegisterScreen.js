@@ -123,6 +123,8 @@ function RegisterScreen() {
                 <View style={styles.iconContainer}>
                     <TextInput
                         style={styles.input}
+
+                        
                         autoCapitalize="none"
                         keyboardType="email-address"
                         onChangeText={(value) => setEmail(value)}

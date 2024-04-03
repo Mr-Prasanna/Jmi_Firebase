@@ -1,6 +1,6 @@
 // LoginScreen.js
 import React, { useState, useEffect } from 'react';
-import { View, Text, Switch, TextInput, TouchableOpacity,Pressable, ActivityIndicator, TouchableHighlight, StyleSheet, Image, Alert, ImageBackground, KeyboardAvoidingView, Dimensions } from 'react-native';
+import { View, Text, Switch, TextInput, TouchableOpacity, Pressable, ActivityIndicator, TouchableHighlight, StyleSheet, Image, Alert, ImageBackground, KeyboardAvoidingView, Dimensions, useColorScheme } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -11,31 +11,33 @@ import { LOGIN_API } from '../apis/api';
 // import { loginSuccess, loginFailure } from './actions';
 import LoginContainer from '../Container/LoginContainer';
 // import SplashScreen from 'react-native-splash-screen';
-import { Input, Block, theme, Icon } from 'galio-framework';
+import { Block, theme, Icon } from 'galio-framework';
 import { Button } from '../components';
 import { Images, nowTheme } from '../constants';
 import { ScrollView } from 'react-native-gesture-handler';
 const { width, height } = Dimensions.get('screen');
+import { Input } from '../components/InputFeild/Input';
 import { useTheme } from '@react-navigation/native';
-// import { useTheme } from '../ThemeContext';
-function LoginScreen(props) {
 
-    const [email, setEmail] = useState('j.prasanna102@gmail.com');
+import {signInWithEmailAndPassword} from 'firebase/auth';
+import { auth } from '../config/firebase';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+
+function LoginScreen(props) {
+    // const { theme } = useContext(ThemeContext);
+    // let activeColors = colors[theme.mode];
+    const [email, setEmail] = useState('');
+    // const [email, setEmail] = useState('j.prasanna102@gmail.com');
     const [emailError, setEmailError] = useState('');
     // const [emailValidError, setEmailValidError] = useState('');
-    const [password, setPassword] = useState('pass@123');
+    const [password, setPassword] = useState('');
+    // const [password, setPassword] = useState('pass@123');
     const [hidePass, setHidePass] = useState(true)
     const [passwordError, setPasswordError] = useState('');
     const [incorrectMsg, setIncorrectMsg] = useState('');
     const [animating, setAnimating] = useState(false);
     const dispatch = useDispatch();
     const { colors } = useTheme();
-    //     const { isDarkMode, toggleTheme } = useTheme();
-
-    //   const screenStyle = {
-    //     backgroundColor: isDarkMode ? '#333' : '#fff',
-    //     color: isDarkMode ? '#fff' : '#333',
-    //   };
 
     // const error = useSelector((state) => state.login.error);
     // useEffect(()=> {
@@ -53,7 +55,7 @@ function LoginScreen(props) {
             setEmailError('Email Required');
         }
         else if (!isEmailValid(email.trim())) {
-            setEmailError('Email invaild')
+            setEmailError('Email Invaild')
         }
         else {
             setEmailError('')
@@ -63,7 +65,7 @@ function LoginScreen(props) {
             setPasswordError('');
         }
         else {
-            setPasswordError('Password Required')
+            setPasswordError('Password  Required')
         }
     }
 
@@ -117,12 +119,33 @@ function LoginScreen(props) {
         navigation.navigate('Register');
     }
 
+    const handleSubmit = async () => {
+        if (email && password) {
+            try {
+                // await createUserWithEmailAndPassword(auth,email,password); // for create user
+                await signInWithEmailAndPassword(auth, email, password);
+               closeActivityIndicator();
+                // Alert.alert("Success","Login successfully",[{text: "OK", onPress: () => {navigation.navigate('Home')}}]);
+               
+            } catch (err) {
+                
+                console.log("get error : ", err.message);
+                // Alert.alert("Error",err.message);
+                Alert.alert("Error","Invalid credentials")
+            }
+        }
+    }
+
     return (
-        // <ScrollView>
-        <View style={[styles.container,]}>
+        <KeyboardAwareScrollView
+        contentContainerStyle={{ flex: 0, flexDirection: 'column',justifyContent: 'center'}} 
+        behavior="position" enabled   
+        keyboardVerticalOffset={200}
+        >
+        <View style={styles.container}>
             <Block flex middle>
                 <ImageBackground
-                    // source={Images.Onboarding}
+                    // source={Images.Onboarding} automaticallyAdjustKeyboardInsets={true}
                     source={Images.RegisterBackground}
                     style={{ flex: 1, height: height, width, zIndex: 1 }}
                 >
@@ -130,60 +153,45 @@ function LoginScreen(props) {
                     <View style={styles.image}>
                         <Image resizeMode={'cover'} source={require('../images/logo-rbg1.png')} />
                     </View>
-                    {/* <View style={{ marginVertical: 45, paddingVertical: 55 }}> */}
-                    {/* <Button title="Toggle Theme" onPress={toggleTheme} /> */}
-                    {/* <Switch onPress={toggleTheme}/> */}
                     <View>
-                        {/* <TouchableOpacity style={{ backgroundColor: colors.card }}>
-                            <Text style={{ color: colors.text }}>Button!</Text>
-                        </TouchableOpacity> */}
                         <Card style={styles.mainCardView}>
-                            <Text style={styles.title}>LOGIN</Text>
+                            <Text style={[styles.title]}>
+                                LOGIN</Text>
                             <Block style={{ marginVertical: 15 }}>
                                 <Block style={styles.blockView}>
                                     <TextInput
-                                        id='email'
-                                        // style={styles.input}
-                                        style={styles.textInputs}
-                                        keyboardType="email-address"
-                                        autoCapitalize="none"
-                                        // onChangeText={text => props.handleOnchange(text, 'email')}
-                                        onChangeText={(value) => setEmail(value)}
                                         value={email}
-                                        placeholder='Email ID'
-                                        required={true}
+                                        style={styles.textInputs}
+                                        onChangeText={(value) => setEmail(value)}
+                                        placeholder="Email ID"
+                                        placeholderTextColor={'black'}
+                                        // keyboardType='email-address'
                                         onChange={handleValidate}
                                     />
                                     <MaterialCommunityIcons name="email" color={'#000'} size={24} style={styles.Icon} />
                                 </Block>
                                 {/* </View> */}
-                                {emailError && <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20 }}>{emailError}</Text>}
+                                {<Text style={{ color: 'red', marginLeft: 30, paddingLeft: 25 }}>{emailError}</Text>}
+                                {/* {emailError && <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20 }}>{emailError}</Text>} */}
                                 {/* {props.emailError && <Text style={{ color: 'red' }}>{props.emailError}</Text>} */}
-                                <Block style={styles.blockView}>
+                                <Block style={styles.blockView}>                                    
                                     <TextInput
+                                        value={password}
                                         style={styles.textInputs}
                                         onChangeText={(value) => setPassword(value)}
-                                        value={password}
                                         placeholder="Password"
+                                        placeholderTextColor={'black'}
                                         secureTextEntry={true}
-                                        maxLength={8}
                                         onChange={handleValidate}
                                     />
-                                    <MaterialCommunityIcons name="lock" color={'#000'} size={24} style={styles.Icon} />
-                                    {/* {
-                                        password &&
-                                        <MaterialCommunityIcons style={{ paddingRight: 15, }}
-                                            name={password ? "eye-outline" : "eye-off-outline"}
-                                            size={20} color='gray'
-                                            onPress={() => setPassword(!password)} />
-                                    } */}
+                                    <MaterialCommunityIcons name="lock" color={'#000'} size={24} style={styles.Icon}/>
                                 </Block>
-                                {passwordError && <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20 }}>{passwordError}</Text>}
+                                {<Text style={{ color: 'red', marginLeft: 30, paddingLeft: 25 }}>{passwordError}</Text>}
+                                {/* {passwordError && <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20 }}>{passwordError}</Text>} */}
                                 {/* {props.passwordError && <Text style={{ color: 'red' }}>{props.passwordError}</Text>} */}
-                                {/* {error && <Text>{error}</Text>} */}
                                 <View style={styles.submitevent}>
                                     <Block>
-                                        <Button color="primary" round style={styles.createButton} onPress={handleSignIn}>
+                                        <TouchableOpacity color="primary" round style={styles.loginButton} onPress={handleSubmit}>
                                             <Text
                                                 style={{ fontFamily: 'montserrat-bold', color: 'white' }}
                                                 size={14}
@@ -191,8 +199,8 @@ function LoginScreen(props) {
                                             >
                                                 LOGIN
                                             </Text>
-                                            <MaterialCommunityIcons name="arrow-right-circle" color={'white'} size={24} style={styles.Icon} />
-                                        </Button>
+                                            <MaterialCommunityIcons name="arrow-right-circle" color={'white'} size={24} style={styles.loginIcon} />
+                                        </TouchableOpacity>
                                     </Block>
                                 </View>
                             </Block>
@@ -205,9 +213,10 @@ function LoginScreen(props) {
                                     </View>
                                 </TouchableHighlight>
                             </View>
-                            {handleSignIn && <ActivityIndicator
+                            {handleSubmit && <ActivityIndicator
                                 animating={animating}
-                                color="#bc2b78"
+                                // color="#bc2b78"
+                                color="#f2711b"
                                 size="large"
                                 style={styles.activityIndicator}
                             />}
@@ -218,9 +227,8 @@ function LoginScreen(props) {
                     </View>
                 </ImageBackground>
             </Block>
-
         </View>
-        // </ScrollView>
+        </KeyboardAwareScrollView>
 
 
     );
@@ -268,7 +276,8 @@ const styles = StyleSheet.create({
     },
     blockView: {
         width: width * 0.7,
-        marginBottom: 15,
+        // marginBottom: 15,
+        marginBottom:10,
         alignSelf: 'center'
     },
     textInputs: {
@@ -357,6 +366,13 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
         // paddingBottom: 10,
     },
+    loginIcon:{
+        position: 'absolute',
+        left: 20,
+        alignSelf: 'center',
+        alignItems: 'center',
+        marginTop: 9
+    },
     Icon: {
         position: 'absolute',
         left: 20,
@@ -369,7 +385,7 @@ const styles = StyleSheet.create({
     mainCardView: {
         //  height: 360, width: 350, 
         width: width * 0.9,
-        height: height * 0.45,
+        height: height * 0.46,// height * 0.40,
         marginHorizontal: 30,
         borderRadius: 30,
         elevation: 5,
@@ -389,7 +405,6 @@ const styles = StyleSheet.create({
         height: 350,
         borderWidth: 2,
         borderColor: 'white',
-        // opacity:0.2
         marginHorizontal: 15,
         paddingTop: 10,
         marginVertical: 5
@@ -425,6 +440,25 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         resizeMode: 'cover',
         // paddingHorizontal:40
+    },
+    activityIndicator:{
+        alignItems:'center',
+        justifyContent:'center',
+        // alignSelf:'center'
+    },
+
+    loginButton: {
+        // alignItems: "center",
+        backgroundColor: '#eb692d',
+        // backgroundColor: 'white',
+        //color: '#fafaf7',
+        //color:'white',
+        fontSize: 20,
+        //fontWeight: '200',
+        paddingHorizontal: 50,
+        paddingVertical: 10,
+        borderRadius: 21.5,
+
     },
 
 

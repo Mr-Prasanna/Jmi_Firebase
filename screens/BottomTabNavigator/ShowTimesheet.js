@@ -7,9 +7,7 @@ import { showAttendanceRequest } from "../../actions/showAttendanceAction";
 import moment from 'moment';
 // import { SHOW_ATTENDANCE_API } from "../../apis/api";
 import { useNavigation } from '@react-navigation/native';
-// import { Table, Row, Rows } from "react-native-table-component";
-// import axios from 'axios';
-// import { Card, DataTable } from "react-native-paper";
+
 import { FlatList } from "react-native-gesture-handler";
 import { Block } from 'galio-framework';
 // import BottomSheet ,{BottomSheetBackdrop} from '@gorhom/bottom-sheet';
@@ -17,6 +15,8 @@ import { BottomSheet } from 'react-native-btr';
 import { ListItem } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import showTimesheet from "../../apis/showAttendanceApi";
+import { Input } from "../../components/InputFeild/Input";
+import { DatePicker }  from "../../components/datepicker/DatePicker";
 // import About from "../DrawerNavigator/AboutScreen";
 
 
@@ -211,7 +211,7 @@ function ShowTimeSheet() {
                   </View>
                   <Block style={styles.mainCardView}>
                     <View style={styles.blockView}>
-                      <TextInput
+                      {/* <TextInput
                         style={styles.textInputs}
                         onChangeText={(value) => setEmpId(value)}
                         value={empId}
@@ -219,8 +219,14 @@ function ShowTimeSheet() {
                         keyboardType='numeric'
                         placeholderTextColor='#666569' //
                       // onChange={handleValidate}
+                      /> */}
+                      <Input 
+                      style={styles.textInputs}
+                      onChangeText={(value) => setEmpId(value)}
+                      placeholder= "Employee ID"
+                      keyboardType='numeric'
+                      onChange={handleValidate}
                       />
-
                     </View>
                     <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20 }}>{empIdError}</Text>
                     <Block width={width * 0.79} style={{ marginBottom: 15, marginTop: 30, alignSelf: 'center' }}>
@@ -235,6 +241,10 @@ function ShowTimeSheet() {
                         inputMode="start"
 
                       />
+                      {/* <DatePicker
+                      value={fromDate}
+                      onChange={(d) => setFromDate(d)}
+                      /> */}
                     </Block>
                     <Text style={{ color: 'red', marginLeft: 20, paddingLeft: 20, paddingTop: 15 }}>{fromDateError}</Text>
 
@@ -275,7 +285,7 @@ function ShowTimeSheet() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 2,
+    // margin: 2,
     // justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#E0F7FA',
